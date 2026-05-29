@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
 
 const notoSans = Noto_Sans({
   subsets: ["latin"],
@@ -38,9 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="bg-white">
       <body className={`${notoSans.variable} font-sans antialiased`}>
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );

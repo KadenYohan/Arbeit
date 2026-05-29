@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { MetroManilaMap } from "@/components/map/MetroManilaMap";
 import { AreaPanel } from "@/components/map/AreaPanel";
 import { CategoryGrid } from "@/components/jobs/CategoryGrid";
@@ -166,9 +168,12 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)]">
-      {/* Hero Section */}
-      <div className="bg-[var(--color-primary-pale)] py-8">
+    <div className="min-h-screen bg-background flex flex-col">
+      <Navbar />
+      
+      <main className="flex-1">
+        {/* Hero Section */}
+        <div className="bg-[#E8F5E9] py-8">
         <div className="mx-auto max-w-[1200px] px-4">
           <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
             {/* Left Column - Map */}
@@ -220,6 +225,9 @@ export default function HomePage() {
         onSearch={handleAreaSearch}
         initialDistrict={selectedDistrict || undefined}
       />
+      </main>
+      
+      <Footer />
     </div>
   );
 }
