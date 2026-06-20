@@ -1,0 +1,540 @@
+FIGMA DESIGN PROMPT - ARBEIT PART-TIME JOBS PLATFORM
+Below is the complete visual design specification for Figma. This includes every detail from Section 5 of the PRD.
+
+PROJECT OVERVIEW
+Create a web design system and key pages for Arbeit, a Metro Manila part-time jobs platform. The visual identity is inspired by:
+
+SUUMO (Japan's property portal) — friendly green, information-dense, clean
+NAVER (Korea's portal) — approachable, organized, interactive
+Baitoru (Japanese job site) — compact cards, clear hierarchy, functional design
+
+Design Philosophy:
+
+Friendly and approachable — NOT cold or corporate
+Information-dense but well-organized — NEVER cluttered
+Interactive map as primary discovery feature — visual, not just text
+Japanese compactness: every pixel earns its place
+Accessible to all ages: large text, clear contrast, obvious CTAs
+NO carousels that auto-play
+NO modal popups on first load
+NO decorative illustrations that add no information
+
+
+1. COLOR PALETTE
+Create color styles in Figma for all these colors:
+NameHex CodeUsagePrimary Green#2E7D32Nav bar background, section headers, primary buttons, active statesBright Green (CTA)#43A047'Apply Now', 'Post Job', 'Search' buttons. Hover state for primary green elements.Deep Green#1B5E20H1 headings, logo text, active nav itemsLight Green BG#C8E6C9District zone fill on map, selected filter chips, tag backgroundsPale Green BG#E8F5E9Card backgrounds, page section backgrounds, sidebarWhite#FFFFFFPrimary card surface, modal backgrounds, input fieldsDark Text#1A1A1AAll primary body text and headingsGray Text#4E4E4ESecondary text: company name, meta infoMid Gray#9E9E9EPlaceholder text, timestamps, captionsBorder Gray#BDBDBDCard borders, dividers, input bordersOrange CTA#E65100'Keep/Save' star button, featured badge, application barometer fillFeatured Amber#F57F17Featured listing border highlight and badgeInfo Blue#1565C0Hyperlinks, station tags, info bannersSuccess Green#2E7D32(same as primary) — Hired status, active listing badgeError Red#B71C1CError messages, rejection status, delete confirmations
+
+2. TYPOGRAPHY
+Font Family: Noto Sans (Google Fonts)
+
+Download weights: 400, 500, 600, 700, 800
+Fallback stack: Noto Sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
+
+Create text styles for:
+ElementFont / WeightSizeNotesBrand LogoNoto Sans / 80032pxLetter-spacing: -0.5px. Color: Deep GreenPage Title (H1)Noto Sans / 70026pxOne per page. Color: Deep GreenSection Heading (H2)Noto Sans / 60020pxSection and category headers. Color: Primary GreenCard Title (H3)Noto Sans / 60016pxJob titles on listing cards. Color: Dark TextBody / DescriptionNoto Sans / 40014pxJob descriptions, general UI text. Color: Dark TextMeta (pay, location)Noto Sans / 50013pxColor: Dark Text or Gray TextButton TextNoto Sans / 60013pxAll button labelsTag / BadgeNoto Sans / 50011pxSkill tags, status badges, feature chipsSmall / CaptionNoto Sans / 40012pxTimestamps, character counters. Color: Mid Gray
+
+3. SPACING SYSTEM
+Base unit: 4px. All spacing values are multiples of 4.
+Create auto-layout spacing tokens:
+TokenValueUsed Forxs4pxIcon-to-text gap, tag internal paddingsm8pxTight spacing, badge paddingmd16pxCard padding, form field spacing, section gap on mobilelg24pxSection spacing on mobile, modal internal paddingxl32pxSection spacing on desktop, header padding2xl48pxHero padding, major section breaksmax-width1200pxMain content container max-width (desktop)sidebar-width300pxRight sidebar width on desktop job feed
+
+4. BORDER RADIUS & SHADOWS
+Border Radius:
+
+Buttons: 6px
+Cards: 10px
+Input fields: 6px
+Modals: 14px
+Tags/badges: 4px
+
+Shadows (create as effect styles):
+
+Card shadow: 0px 2px 8px rgba(0,0,0,0.06)
+Card hover shadow: 0px 4px 16px rgba(0,0,0,0.10)
+Modal shadow: 0px 8px 32px rgba(0,0,0,0.16)
+
+
+5. KEY PAGE DESIGNS TO CREATE
+
+5.1 HOMEPAGE — ABOVE THE FOLD
+Desktop (1200px container):
+Layout: Two-column layout
+LEFT COLUMN (60% width):
+
+Title: "Find Your Next Part-Time Job in Metro Manila" (H1, Deep Green)
+Interactive Metro Manila District Map (SVG)
+
+Show 4 colored district zones over a simplified Metro Manila outline
+District 1 (Manila) — one large zone, color: Light Green BG with Primary Green border
+District 2 (Inner East: Mandaluyong, Marikina, Pasig, Quezon City, San Juan) — color: slightly darker shade of Light Green BG
+District 3 (North: Caloocan, Malabon, Navotas, Valenzuela) — color: another shade
+District 4 (South: Las Piñas, Makati, Muntinlupa, Parañaque, Pasay, Pateros, Taguig) — color: another shade
+Each zone has a label (e.g., "District 1 — Manila") in Primary Green text
+Each zone has a job count badge (rounded rectangle, white background, Primary Green text: "347 jobs")
+Hover state: Zone brightens by 15%, tooltip appears above cursor showing "X jobs available"
+Click state: Zone scales to 1.03 then snaps back, opens Area Selection Panel
+
+
+
+RIGHT COLUMN (40% width):
+
+Title: "Search by Job Type" (H2, Primary Green)
+Category Grid (2 columns on desktop, each category tile):
+
+Tile: 150px × 150px
+Background: Pale Green BG
+Border: 1px solid Border Gray
+Border-radius: 10px
+Icon: 48×48px, centered, Primary Green color
+Label below icon: category name (e.g., "Food & Beverage"), Noto Sans 500, 13px, Dark Text
+Hover state: border becomes Primary Green, background becomes Light Green BG
+Categories to show: F&B, Retail, Admin/Office, Education, Events, Logistics, Healthcare, IT/Tech, Beauty/Wellness, Others
+
+
+
+BELOW BOTH COLUMNS:
+
+Section: "Featured Jobs" (H2, 32px top margin)
+
+Horizontal scroll container on mobile, 3-column grid on desktop
+Use Job Listing Card design (see 5.4)
+
+
+Section: "Recently Posted" (H2, 32px top margin)
+
+4-column grid on desktop, single-column on mobile
+Use Job Listing Card design
+
+
+
+
+5.2 AREA SELECTION PANEL (MODAL / SLIDE PANEL)
+Trigger: Clicking any district zone on the map, or 'Search by Area' link
+Design:
+
+Desktop: Right-side slide panel, width: 480px, full height
+Mobile: Bottom sheet, full width, 70% viewport height, swipe down to close
+Background: White
+Border-left (desktop): 1px solid Border Gray
+Shadow: Modal shadow
+
+Header:
+
+Two tabs (tab bar, 48px height each):
+
+Tab 1: "By Area" (default selected)
+Tab 2: "By Line / Station"
+Selected tab: Primary Green underline (3px thick), text color Primary Green
+Unselected tab: Gray Text, no underline
+Border-bottom: 1px solid Border Gray
+
+
+
+BY AREA TAB LAYOUT:
+Left Column (35% of panel width):
+
+List of districts (each row 48px height):
+
+"District 1 — Manila"
+"District 2 — Inner East"
+"District 3 — North"
+"District 4 — South"
+Selected district: background Light Green BG, text Primary Green
+Unselected: background White, text Dark Text
+Hover: background Pale Green BG
+
+
+
+Right Panel (65% of panel width):
+
+Scrollable list of cities in the selected district
+Each city row:
+
+Checkbox (16×16px, Primary Green when checked)
+City name (Noto Sans 500, 14px, Dark Text)
+Job count in parentheses (e.g., "(234 jobs)") — Mid Gray
+Some city rows have a "+" expand button on the right to show barangays underneath (indented, smaller font)
+
+
+Top row of right panel: "All of District X (N jobs)" — checkbox that selects all cities in that district
+Bottom bar (sticky):
+
+Left: "X jobs match — Clear All" (Info Blue link)
+Right: "Search with this selection >" (Button: Bright Green CTA, white text, 48px height, full width on mobile)
+
+
+
+BY LINE / STATION TAB LAYOUT:
+Left Column (35%):
+
+List of transit lines (each row 48px height):
+
+Rail: MRT-3, LRT-2, LRT-1, MRT-7 (Coming Soon), Subway (Coming Soon), NSCR (Coming Soon)
+Bus: EDSA Bus Carousel, BGC Bus, Makati Ayala Bus, PITX
+P2P: Trinoma P2P, Alabang P2P, SM North P2P, PITX P2P
+Lines marked "Coming Soon": text is Mid Gray with a small "Coming Soon" badge (Border Gray background, 4px radius, 8px padding)
+Selected line: background Light Green BG, text Primary Green
+
+
+
+Right Panel (65%):
+
+Scrollable list of stations/stops for the selected line
+Each station row:
+
+Checkbox (16×16px)
+Station name (Noto Sans 500, 14px)
+Job count in parentheses
+For "Coming Soon" lines, station rows still enabled but have a small grey tag next to name: "Coming Soon"
+
+
+Bottom bar: same as Area tab
+
+
+5.3 FILTER BAR (JOB FEED PAGE)
+Location: Top of /jobs page, above the listing grid
+Design: Table-style bordered layout (NOT hidden dropdowns)
+Container: Full width, max 1200px, background White, border 1px solid Border Gray, border-radius 10px, padding 16px
+Each Filter Row (7 rows total):
+Row LabelUI ControlVisual DesignArea (エリア)Chips showing selected cities/stations + 'Add/Change' button (Primary Green, outlined) on right. Chips: Light Green BG, Border Gray border, 4px radius, 8px padding, Dark Text. X icon to remove. Also: 'Search by Line' shortcut link (Info Blue, underlined) on far right.Row height: auto-fit chips. Chips wrap.Job Type (職種)Same as Area: chips for selected categories + 'Add/Change' button.Same styling as Area chips.Pay (給与)Two inline dropdowns: 1) Pay Type (Any / Hourly / Daily / Monthly). 2) Min Pay (Any / ₱50+ / ₱75+ / ₱100+ / ₱125+). Dropdowns: 200px width each, 40px height, border 1px Border Gray, border-radius 6px, 12px padding, Noto Sans 400 14px.Inline, side by side with 8px gap.Schedule (勤務形態)Checkboxes inline (multi-select): Weekdays, Weekends, Mornings, Afternoons, Evenings, Flexible. Checkbox: 16×16px, Primary Green when checked. Label: Noto Sans 400 13px, 16px gap between checkbox-label pairs.Checkboxes wrap on mobile.Work Period (勤務期間)Same checkbox style: Short-term (under 1 month), Regular Part-time, Seasonal.Same as Schedule row.Features (特徴)Same checkbox style: No Experience OK, Students OK, No Interview, Immediate Start, Work-from-Home, Uniform Provided.Chips can be used instead of checkboxes for a more compact look. Toggle chips: unselected = White bg + Border Gray border, selected = Light Green BG + Primary Green border.Free Word (フリーワード)Text input: placeholder "Store name, same-day pay, short-term..." + green 'Filter' button (Bright Green CTA, 100px width, 40px height, white text). Input: 400px width on desktop, border 1px Border Gray, border-radius 6px, 12px padding.Input and button inline with 8px gap.
+Right Side of Filter Bar (sticky on desktop):
+
+Green info box (background: Pale Green BG, border-left 4px solid Primary Green, 16px padding, border-radius 6px):
+
+Icon: green checkmark or job icon
+Text: "● X jobs match this criteria" (Primary Green, Noto Sans 600, 16px)
+Button below: "Search by this criteria >" (Bright Green CTA, full width, 48px height)
+Below button: "Save this search" link (Info Blue, underlined, 13px)
+Below that: "Get email alerts" link (Info Blue, underlined, 13px)
+
+
+
+Mobile Layout:
+
+Filter bar becomes accordion: each row is collapsible
+Open one section at a time
+Bottom bar: sticky "X jobs — Filter" button
+
+
+5.4 JOB LISTING CARD (FEED VIEW)
+Dimensions:
+
+Desktop: 280px width (4 columns in 1200px container with 16px gaps)
+Mobile: Full width minus 16px margins
+
+Card Structure (top to bottom):
+
+Photo (top, full width, 180px height):
+
+Company photo or job environment photo
+If no photo: show category icon placeholder (centered, 64×64px, Primary Green)
+Border-radius: 10px 10px 0 0
+
+
+Content Area (16px padding all sides):
+Badges (absolute position, top-right of photo, 8px from edges):
+
+NEW badge (if posted <48h): rounded rectangle, background Info Blue, white text "NEW", 4px radius, 6px padding, Noto Sans 600 11px
+FEATURED badge: background Featured Amber, white text "FEATURED", same style
+URGENT badge (if <5 slots left): background Orange CTA, white text "URGENT"
+Stack badges vertically with 4px gap if multiple
+
+
+Title (bold, max 2 lines, ellipsis overflow):
+
+Noto Sans 600, 16px, Dark Text, line-height 1.3
+Clickable, underline on hover
+
+
+Company Name (below title, 4px gap):
+
+Noto Sans 400, 13px, Gray Text
+
+
+Feature Tags Row (8px top margin):
+
+Horizontal scroll or wrap on mobile
+Each tag: bordered chip (border 1px Border Gray, background White, 4px radius, 6px padding, Noto Sans 500 11px, Dark Text)
+Examples: [No Experience OK] [Students OK] [Weekends only]
+4px gap between tags
+
+
+Pay Row (12px top margin):
+
+Icon: ₱ symbol in circle (Primary Green, 20×20px) on left
+Pay label: "Hourly" / "Daily" / "Monthly" (Noto Sans 500 12px, Gray Text)
+Pay amount: "₱80–₱100" (Noto Sans 600 16px, Orange CTA color)
+Layout: icon, label, amount inline with 4px gaps
+
+
+Schedule Row (8px top margin):
+
+Clock icon (Primary Green, 16×16px) on left
+Schedule text: "Mon–Fri, 3:00PM–9:00PM" (Noto Sans 400 13px, Gray Text)
+
+
+Location Row (8px top margin):
+
+Pin icon (Primary Green, 16×16px) on left
+Location text: "Makati City / Nearest: Ayala MRT-3 (5 min walk)" (Noto Sans 400 13px, Gray Text)
+
+
+Application Barometer (16px top margin, full width):
+
+Label above: "Application Status" (Noto Sans 500 11px, Mid Gray)
+Barometer: 5 rectangular blocks (each 20% width, 24px height, 2px gap between)
+Fill: Orange CTA color for filled blocks, Border Gray for empty blocks
+Text overlay on barometer: "Actively Recruiting!" or "3 slots left" (white text, Noto Sans 600 11px, centered)
+
+
+Action Buttons (16px top margin):
+
+Two buttons side by side (equal width, 8px gap):
+
+LEFT: Star icon + "Keep" (outlined button: border Primary Green, background White, Primary Green text, 40px height, border-radius 6px)
+RIGHT: "See Details >" (solid button: background Bright Green CTA, white text, 40px height, border-radius 6px)
+
+
+
+
+
+Card Container:
+
+Background: White
+Border: 1px solid Border Gray
+Border-radius: 10px
+Shadow: Card shadow
+Hover state: border becomes Primary Green, shadow deepens to Card hover shadow
+Entire card is clickable (not just the title)
+
+
+5.5 JOB DETAIL PAGE
+Layout: Desktop = 2 columns. Left (65%) = job info. Right (35%) = photos + sticky Apply/Keep buttons.
+LEFT COLUMN:
+
+Page Title (H1):
+
+Job title in full (Noto Sans 700, 26px, Deep Green)
+Below: Company name (linked, Info Blue, underlined, 14px) + category breadcrumb (Gray Text, 13px): "Home > Food & Beverage > Barista"
+
+
+Feature Tags Row (16px top margin):
+
+All applicable tags displayed as bordered chips
+Same style as card tags but slightly larger (8px padding, 12px font)
+
+
+Info Table (24px top margin):
+
+Table layout, full width
+Each row: 48px min-height, 16px padding, border-bottom 1px Border Gray
+Left cell (30% width): Label (Noto Sans 600, 14px, Gray Text) — e.g., "Occupation:", "Salary:", "Working Hours:"
+Right cell (70% width): Value (Noto Sans 400, 14px, Dark Text)
+Rows:
+
+Occupation: Category + Sub-category
+Salary: Pay type, range, allowance notes
+Working Hours: All shift schedules listed
+Work Period: Short-term / Regular
+Holidays / Days off: Which days
+Experience / Requirements: Education, age range, skills
+Work Location: Full address + "View map and access details" link (Info Blue)
+Nearest Station: List of stations with walk time (e.g., "Ayala MRT-3 (5 min walk), Makati Ave LRT-1 (10 min walk)")
+
+
+
+
+Recruitment Information Section (24px top margin):
+
+Section title: "What You'll Do" (H2, 20px, Primary Green)
+Full job description text (Noto Sans 400, 14px, Dark Text, line-height 1.6)
+If text >400 chars: truncate with "See More" expandable (Info Blue link)
+
+
+Application Barometer (24px top margin):
+
+Same as card barometer but larger (40px height per block)
+Full width
+
+
+Apply Button (16px top margin):
+
+Full width, 56px height, background Bright Green CTA, white text, border-radius 6px
+Text: "Apply Now >" (Noto Sans 600, 16px)
+
+
+Keep Button (8px top margin):
+
+Full width, 48px height, outlined (border Primary Green, background White), Primary Green text
+Text: "★ Keep" (star icon + text)
+
+
+
+RIGHT COLUMN (sticky on desktop):
+
+Company Photo Gallery:
+
+1–3 photos in a carousel (swipeable)
+Each photo: 300px width × 200px height, border-radius 10px, object-fit cover
+Dots indicator below if multiple photos
+
+
+Gallery Label (below photos, 8px gap):
+
+"Check out the uniforms!" or "See workplace photos" (Noto Sans 500, 13px, Gray Text)
+
+
+Sticky Container (sticky position, top: 80px, follows scroll):
+
+Contains Apply + Keep buttons (same as left column)
+Background: White, border 1px Border Gray, border-radius 10px, 16px padding, shadow: Card shadow
+
+
+
+BELOW MAIN CONTENT (full width):
+
+Application Info Section (32px top margin):
+
+Section title: "How to Apply" (H2, Primary Green)
+Company address
+Interview info: "Apply online and we'll contact you" / "Call for phone interview"
+Contact: "View phone number" button (outlined Primary Green)
+
+
+Company Info Section (24px top margin):
+
+Section title: "About the Company" (H2, Primary Green)
+Company name, location, business description (200 chars max)
+Link: "View other jobs from this company >" (Info Blue, underlined)
+
+
+
+
+6. ANIMATION SPECIFICATIONS
+Create these animations as Figma prototypes:
+AnimationDurationEasingBehaviorDistrict map hover100msease-outZone color brightens by 15%. Tooltip fades in (opacity 0→1).District map click150msease-outZone scales 1.0→1.03→1.0. Area Selection Panel slides in from right (desktop) or bottom (mobile).Area panel slide-in200msease-outPanel enters from off-screen. Desktop: translateX(480px→0). Mobile: translateY(70vh→0).Job count update250msease-in-outNumber counter animates (e.g., "0 jobs" → "347 jobs" with smooth counting).Card hover100msease-outBorder color changes to Primary Green. Shadow changes from Card shadow to Card hover shadow.Button press80msease-outScale 1.0→0.97 on mousedown, snap back to 1.0 on release.Loading skeleton1.5slinear, loopShimmer effect: linear gradient moves left-to-right across skeleton placeholder. Gradient: transparent → rgba(255,255,255,0.5) → transparent.Toast notificationIn: 200ms, Out: 300msease-outSlide up from bottom of screen (translateY), auto-dismiss after 4 seconds with fade-out.Modal open200msease-outBackdrop fades in (opacity 0→0.5). Modal card scales 0.95→1.0 and opacity 0→1.Modal close200msease-inReverse of open. Backdrop fades out, modal scales 1.0→0.95 and opacity 1→0.Keep/Save toggle150msease-outStar icon fills with Orange CTA color. Small bounce effect: scale 1.0→1.2→1.0.
+CRITICAL: All animations must have a "Reduced Motion" variant where transitions are instant or ≤50ms. This respects accessibility settings.
+
+7. ADVERTISEMENT PLACEHOLDER DESIGNS
+All ad slots must be clearly labeled "Ad" or "Sponsored".
+Zone IDLocationDimensionsDesignAD-TOP-BANNERHomepage — below nav, above district map1200×90pxLeaderboard. Light border 1px Border Gray. Small "Ad" label (top-left, 8px padding, Mid Gray text, 10px font). Placeholder image in center.AD-SIDEBAR-TOPJob feed — right sidebar, top position300×250pxDesktop only. Same border and "Ad" label style. Sticky until 300px scroll.AD-SIDEBAR-MIDJob feed — right sidebar, mid position300×250pxDesktop only. Appears after 400px scroll.AD-FEED-INLINEInside job listing grid, every 8 cardsFull card width (280px), 90px heightStyled like a listing card but with green "Sponsored" badge (top-left, background Bright Green CTA, white text, 4px radius, 6px padding). Border: 1px solid Primary Green to differentiate from real listings. Max 2 per page.AD-JOB-DETAILJob detail page — below company info728×90pxBanner below main content, above footer. Same border and "Ad" label.AD-MOBILE-STICKYMobile web — fixed bottom strip320×50pxFixed position at bottom of viewport. White background, Border Gray border-top. Small X button (top-right, 16×16px, Mid Gray) to dismiss. Does NOT cover Apply button.AD-AREA-MAP-PANELArea selection panel — below city list300×100pxSmall banner inside the panel, below the scrollable city list. Only shown when panel is open.
+Ad Placeholder Design in Figma:
+
+Create a component "Ad Placeholder" with all zones as variants
+Each variant has:
+
+Light gray background (Pale Green BG)
+Dashed border 2px Border Gray
+Centered text "Ad Placeholder — [dimensions]" (Mid Gray, Noto Sans 400, 12px)
+"Ad" label in corner
+
+
+
+
+8. COMPONENT LIBRARY TO CREATE
+Build these as Figma components with variants:
+
+Button Component
+
+Variants: Primary (solid Bright Green), Secondary (outlined Primary Green), Destructive (solid Error Red), Disabled (40% opacity)
+States: Default, Hover, Pressed, Disabled
+Sizes: Small (32px height), Medium (40px height), Large (48px height), Extra Large (56px height)
+
+
+Input Field Component
+
+Variants: Text, Email, Password, Textarea, Dropdown
+States: Default, Focused (border Primary Green), Error (border Error Red + error message below), Disabled
+Include label above, placeholder text, and helper text below
+
+
+Checkbox Component
+
+States: Unchecked, Checked (Primary Green fill), Indeterminate, Disabled
+Size: 16×16px
+
+
+Chip/Tag Component
+
+Variants: Default (White bg, Border Gray border), Selected (Light Green BG, Primary Green border), Removable (with X icon)
+States: Default, Hover
+
+
+Badge Component
+
+Variants: NEW (Info Blue), FEATURED (Featured Amber), URGENT (Orange CTA), Coming Soon (Border Gray)
+All have white text, 4px radius, 6px padding
+
+
+Card Component
+
+Variants: Job Listing Card, Company Card, Empty State Card
+States: Default, Hover, Clicked
+Include all internal elements as described in 5.4
+
+
+Modal/Dialog Component
+
+Include backdrop (black 50% opacity), modal container (White, 14px radius, Modal shadow)
+Header with title + close X button
+Content area
+Footer with action buttons
+
+
+Toast Notification Component
+
+Variants: Success (Primary Green icon), Info (Info Blue icon), Warning (Featured Amber icon), Error (Error Red icon)
+Positioned at bottom-center, 400px max width, 16px padding, border-radius 6px, shadow
+
+
+Application Barometer Component
+
+5 blocks, configurable fill level (0–5)
+Text overlay options: "Actively Recruiting!", "X slots left", "Filled"
+
+
+
+
+9. RESPONSIVE BREAKPOINTS
+Define these breakpoints in Figma:
+
+Mobile: 375px width (iPhone SE as baseline)
+Tablet: 768px width
+Desktop: 1200px width (max-width container)
+Large Desktop: 1440px width
+
+Create mobile and desktop variants of:
+
+Homepage
+Job Feed page
+Job Detail page
+Area Selection Panel (desktop = side panel, mobile = bottom sheet)
+
+
+10. DESIGN SYSTEM DOCUMENTATION
+In your Figma file, create a separate page titled "Design System" that includes:
+
+Color palette with all color swatches and usage notes
+Typography scale with all text styles
+Spacing tokens (visual rulers showing xs, sm, md, lg, xl, 2xl)
+Component library with all variants
+Icon set (if creating custom icons)
+Grid system (1200px container, 16px gutters, 12 columns)
+
+
+DELIVERABLES FOR FIGMA:
+
+Homepage (desktop + mobile)
+Job Feed Page with filter bar (desktop + mobile)
+Job Detail Page (desktop + mobile)
+Area Selection Panel (desktop side panel + mobile bottom sheet)
+Job Listing Card (component with variants)
+Complete Design System Page
+All components listed in Section 8
+Ad placeholder variants
+Interactive prototype showing:
+
+District map click → Area panel opens
+Job card click → Detail page
+Filter interactions
+Button states (hover, pressed)
