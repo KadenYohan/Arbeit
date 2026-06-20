@@ -1,129 +1,187 @@
 import { useState } from 'react';
-import { DISTRICTS } from './mockData';
 
 interface MetroManilaMapProps {
   onDistrictClick: (districtId: string) => void;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SVG viewBox: 0 0 420 580
-// Oriented: West (Manila Bay) = left, North (Bulacan) = top
-// Reference: official Metro Manila LGU map image
-// ─────────────────────────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────────────────────────────────
+ * Metro Manila Interactive Map
+ * viewBox: 0 0 500 920
+ * Colors & shapes traced from the official NCR reference map image
+ * ───────────────────────────────────────────────────────────────────────────── */
 
 const CITY_DEFS = [
+  // ── CALOOCAN NORTH (large blue area at top) ──
+  {
+    id: 'caloocan-north', name: 'Caloocan', district: 'd3',
+    fill: '#4A6FA5', hover: '#5E8ABF',
+    path: `M 170,42 L 200,30 L 240,24 L 285,22 L 330,28 L 358,42
+           L 374,68 L 382,105 L 380,148 L 372,178 L 358,198
+           L 335,210 L 305,208 L 278,212 L 255,218 L 232,222
+           L 214,224 L 200,218 L 190,200 L 182,168 L 178,130
+           L 175,88 Z`,
+    lx: 278, ly: 108,
+  },
+  // ── VALENZUELA (purple, upper-left) ──
   {
     id: 'valenzuela', name: 'Valenzuela', district: 'd3',
-    fill: '#6E4694', hover: '#8A5BB5',
-    path: 'M 50,20 L 220,20 L 240,80 L 200,120 L 90,110 Z',
-    lx: 130, ly: 60,
+    fill: '#7B52AB', hover: '#9575CD',
+    path: `M 92,68 L 120,55 L 148,46 L 170,42 L 175,88 L 178,130
+           L 182,168 L 180,195 L 170,218 L 155,238 L 138,248
+           L 118,248 L 102,238 L 92,215 L 88,178 L 86,138 L 88,100 Z`,
+    lx: 134, ly: 148,
   },
-  {
-    id: 'caloocan', name: 'Caloocan', district: 'd3',
-    fill: '#8A158A', hover: '#A61FA6',
-    path: 'M 220,20 L 370,20 L 390,90 L 250,120 L 240,80 Z',
-    lx: 290, ly: 60,
-  },
+  // ── MALABON (deep pink, small coastal) ──
   {
     id: 'malabon', name: 'Malabon', district: 'd3',
-    fill: '#B81D45', hover: '#D62754',
-    path: 'M 90,110 L 140,100 L 160,130 L 140,170 L 80,160 Z',
-    lx: 115, ly: 135,
+    fill: '#C2185B', hover: '#E91E63',
+    path: `M 52,222 L 78,215 L 102,218 L 118,225 L 118,248 L 112,268
+           L 100,288 L 82,298 L 62,298 L 48,285 L 42,262 L 44,238 Z`,
+    lx: 82, ly: 258,
   },
+  // ── NAVOTAS (dark maroon, tiny coastal) ──
   {
     id: 'navotas', name: 'Navotas', district: 'd3',
-    fill: '#812033', hover: '#A02B43',
-    path: 'M 50,120 L 90,110 L 80,160 L 70,200 L 30,180 Z',
-    lx: 55, ly: 160, fs: 8,
+    fill: '#880E4F', hover: '#AD1457',
+    path: `M 18,248 L 38,238 L 44,238 L 48,260 L 48,285 L 38,305
+           L 25,312 L 16,298 L 14,268 Z`,
+    lx: 28, ly: 278, fs: 9,
   },
+  // ── CALOOCAN SOUTH (blue, central strip) ──
   {
-    id: 'quezon-city', name: 'Quezon City', district: 'd4',
-    fill: '#4F2696', hover: '#6535B8',
-    path: 'M 250,120 L 390,90 L 440,160 L 440,300 L 320,330 L 250,290 L 220,250 L 200,150 Z',
-    lx: 320, ly: 220,
+    id: 'caloocan-south', name: 'Caloocan', district: 'd3',
+    fill: '#4A6FA5', hover: '#5E8ABF',
+    path: `M 118,248 L 138,248 L 155,238 L 170,230 L 190,225
+           L 200,218 L 210,228 L 215,248 L 212,272 L 205,295
+           L 192,315 L 175,332 L 155,340 L 135,342 L 118,330
+           L 105,310 L 100,288 L 112,268 Z`,
+    lx: 158, ly: 290,
   },
+  // ── QUEZON CITY (deep purple, LARGEST) ──
   {
-    id: 'marikina', name: 'Marikina', district: 'd2',
-    fill: '#2C3682', hover: '#3B48AA',
-    path: 'M 390,90 L 440,90 L 460,160 L 440,160 Z',
-    lx: 430, ly: 130, fs: 9,
+    id: 'quezon-city', name: 'Quezon City', district: 'd3',
+    fill: '#6A1B9A', hover: '#8E24AA',
+    path: `M 200,218 L 214,224 L 232,222 L 255,218 L 278,212
+           L 305,208 L 335,210 L 358,198 L 372,178 L 380,148
+           L 388,142 L 400,150 L 412,175 L 418,208 L 415,248
+           L 408,285 L 396,318 L 380,348 L 362,372 L 340,385
+           L 312,388 L 288,385 L 265,375 L 245,362 L 230,348
+           L 222,330 L 215,308 L 212,285 L 212,272 L 215,248
+           L 210,228 Z`,
+    lx: 310, ly: 268,
   },
+  // ── MARIKINA (light purple, east) ──
+  {
+    id: 'marikina', name: 'Marikina', district: 'd3',
+    fill: '#CE93D8', hover: '#E1BEE7',
+    path: `M 388,285 L 408,285 L 418,268 L 435,275 L 452,298
+           L 458,328 L 450,358 L 438,378 L 418,395 L 396,400
+           L 382,392 L 378,368 L 382,338 L 385,310 Z`,
+    lx: 425, ly: 335,
+  },
+  // ── MANILA (red, west coast) ──
   {
     id: 'manila', name: 'Manila', district: 'd1',
-    fill: '#B92D23', hover: '#D9392D',
-    path: 'M 70,200 L 140,170 L 200,150 L 220,250 L 180,310 L 90,320 L 40,250 Z',
-    lx: 130, ly: 250,
+    fill: '#D32F2F', hover: '#EF5350',
+    path: `M 48,342 L 72,332 L 98,328 L 118,330 L 135,342 L 155,340
+           L 175,345 L 188,360 L 192,385 L 190,412 L 182,438
+           L 170,460 L 152,478 L 128,488 L 98,486 L 72,475
+           L 52,455 L 42,425 L 38,392 L 40,362 Z`,
+    lx: 118, ly: 408,
   },
+  // ── SAN JUAN (green, small center) ──
   {
     id: 'san-juan', name: 'San Juan', district: 'd2',
-    fill: '#E34821', hover: '#FA5830',
-    path: 'M 220,250 L 250,290 L 230,310 L 200,290 Z',
-    lx: 225, ly: 285, fs: 8,
+    fill: '#2E7D32', hover: '#43A047',
+    path: `M 228,362 L 255,358 L 278,362 L 288,378 L 285,395
+           L 268,408 L 248,410 L 232,402 L 225,388 Z`,
+    lx: 256, ly: 385, fs: 9,
   },
+  // ── MANDALUYONG (pink, center) ──
   {
     id: 'mandaluyong', name: 'Mandaluyong', district: 'd2',
-    fill: '#D83023', hover: '#F04033',
-    path: 'M 200,290 L 230,310 L 270,330 L 250,370 L 180,350 Z',
-    lx: 225, ly: 335, fs: 8,
+    fill: '#E91E63', hover: '#F48FB1',
+    path: `M 218,410 L 248,410 L 268,408 L 295,412 L 318,422
+           L 328,442 L 325,462 L 308,478 L 282,482 L 255,478
+           L 232,468 L 218,450 L 215,430 Z`,
+    lx: 272, ly: 445, fs: 9,
   },
+  // ── PASIG (hot pink, center-east) ──
   {
     id: 'pasig', name: 'Pasig', district: 'd2',
-    fill: '#B84310', hover: '#D65319',
-    path: 'M 270,330 L 320,330 L 410,320 L 430,390 L 360,410 L 290,370 Z',
-    lx: 350, ly: 360,
+    fill: '#EC407A', hover: '#F8BBD0',
+    path: `M 328,398 L 340,385 L 362,378 L 382,392 L 396,400
+           L 418,395 L 435,408 L 448,432 L 450,462 L 442,495
+           L 425,518 L 402,528 L 378,525 L 355,515 L 335,498
+           L 320,482 L 318,468 L 325,462 L 328,442 L 318,422 Z`,
+    lx: 385, ly: 458,
   },
+  // ── MAKATI (blue/teal, center-south) ──
   {
     id: 'makati', name: 'Makati', district: 'd4',
-    fill: '#F09A20', hover: '#FFAE3A',
-    path: 'M 180,350 L 250,370 L 290,370 L 270,430 L 160,410 Z',
-    lx: 220, ly: 395,
+    fill: '#1565C0', hover: '#42A5F5',
+    path: `M 170,472 L 195,465 L 218,462 L 238,468 L 258,475
+           L 282,482 L 308,478 L 318,492 L 312,518 L 298,542
+           L 275,558 L 248,565 L 222,562 L 198,548 L 180,528
+           L 172,502 Z`,
+    lx: 245, ly: 518,
   },
+  // ── PATEROS (dark olive, tiny) ──
   {
     id: 'pateros', name: 'Pateros', district: 'd4',
-    fill: '#62751E', hover: '#7A9127',
-    path: 'M 290,370 L 320,370 L 330,390 L 300,400 Z',
-    lx: 310, ly: 385, fs: 7,
+    fill: '#5D4037', hover: '#795548',
+    path: `M 320,482 L 335,498 L 355,515 L 372,520 L 368,540
+           L 350,548 L 328,542 L 315,528 L 312,518 L 318,492 Z`,
+    lx: 340, ly: 518, fs: 9,
   },
-  {
-    id: 'taguig', name: 'Taguig', district: 'd4',
-    fill: '#28752E', hover: '#35993C',
-    path: 'M 300,400 L 330,390 L 360,410 L 420,440 L 390,500 L 280,480 L 270,430 Z',
-    lx: 340, ly: 450,
-  },
+  // ── PASAY (orange, south-west coast) ──
   {
     id: 'pasay', name: 'Pasay', district: 'd4',
-    fill: '#E46A0B', hover: '#FF7E17',
-    path: 'M 90,320 L 180,310 L 180,350 L 160,410 L 80,390 L 50,350 Z',
-    lx: 120, ly: 365,
+    fill: '#EF6C00', hover: '#FB8C00',
+    path: `M 88,492 L 112,488 L 128,488 L 152,482 L 170,478
+           L 172,502 L 178,528 L 172,558 L 152,575 L 125,580
+           L 98,575 L 78,558 L 68,535 L 72,508 Z`,
+    lx: 125, ly: 535, fs: 10,
   },
+  // ── TAGUIG (olive green, large south-center) ──
+  {
+    id: 'taguig', name: 'Taguig', district: 'd4',
+    fill: '#558B2F', hover: '#7CB342',
+    path: `M 275,558 L 298,542 L 328,542 L 350,548 L 368,540
+           L 385,548 L 405,572 L 415,605 L 410,645 L 398,678
+           L 380,702 L 355,712 L 325,708 L 295,698 L 272,678
+           L 258,652 L 255,620 L 260,588 L 268,568 Z`,
+    lx: 338, ly: 635,
+  },
+  // ── PARAÑAQUE (yellow/gold) ──
   {
     id: 'paranaque', name: 'Parañaque', district: 'd4',
-    fill: '#E57E12', hover: '#FF9221',
-    path: 'M 80,390 L 160,410 L 270,430 L 280,480 L 210,500 L 100,460 Z',
-    lx: 180, ly: 450,
+    fill: '#F9A825', hover: '#FDD835',
+    path: `M 115,582 L 148,575 L 172,562 L 198,568 L 228,575
+           L 255,590 L 258,625 L 255,658 L 242,688 L 218,702
+           L 188,708 L 155,702 L 128,688 L 112,665 L 105,638
+           L 108,608 Z`,
+    lx: 185, ly: 642,
   },
+  // ── LAS PIÑAS (lime green, southwest) ──
   {
     id: 'las-pinas', name: 'Las Piñas', district: 'd4',
-    fill: '#A9B023', hover: '#C4CB31',
-    path: 'M 30,440 L 100,460 L 160,480 L 150,520 L 40,500 Z',
-    lx: 90, ly: 480, fs: 9,
+    fill: '#7CB342', hover: '#9CCC65',
+    path: `M 72,692 L 105,678 L 128,688 L 155,702 L 185,715
+           L 198,742 L 192,772 L 172,792 L 142,798 L 112,792
+           L 85,778 L 72,752 L 65,722 Z`,
+    lx: 135, ly: 745,
   },
+  // ── MUNTINLUPA (dark green, southernmost) ──
   {
     id: 'muntinlupa', name: 'Muntinlupa', district: 'd4',
-    fill: '#28813C', hover: '#34A14C',
-    path: 'M 160,480 L 210,500 L 280,480 L 290,570 L 170,570 L 140,520 Z',
-    lx: 220, ly: 530,
+    fill: '#2E7D32', hover: '#43A047',
+    path: `M 185,715 L 218,702 L 242,695 L 272,698 L 305,708
+           L 335,718 L 350,745 L 348,778 L 335,812 L 312,842
+           L 282,860 L 248,865 L 218,858 L 195,842 L 182,812
+           L 178,778 L 182,748 Z`,
+    lx: 268, ly: 790,
   },
-] as const;
-
-// ─── District label polygons ──────────────────────────────────────────────────
-const DISTRICT_LABELS = [
-  { text: 'BULACAN', x: 230, y: 8, size: 9 },
-  { text: 'RIZAL', x: 414, y: 185, size: 9, rotate: -90, rx: 414, ry: 185 },
-  { text: 'CAVITE', x: 8, y: 490, size: 8 },
-  { text: 'LAGUNA', x: 195, y: 574, size: 9 },
-  { text: 'LAGUNA LAKE', x: 398, y: 460, size: 8 },
-  { text: 'MANILA BAY', x: 8, y: 280, size: 9, rotate: -90, rx: 8, ry: 280 },
 ] as const;
 
 export function MetroManilaMap({ onDistrictClick }: MetroManilaMapProps) {
@@ -132,25 +190,39 @@ export function MetroManilaMap({ onDistrictClick }: MetroManilaMapProps) {
   return (
     <div style={{ position: 'relative', width: '100%' }}>
       <svg
-        viewBox="0 0 420 580"
-        style={{ width: '100%', height: 'auto', cursor: 'pointer', background: '#B3E5FC', borderRadius: 8, display: 'block' }}
+        viewBox="0 0 500 920"
+        style={{
+          width: '100%',
+          height: 'auto',
+          cursor: 'pointer',
+          background: '#64B5F6',
+          borderRadius: 12,
+          display: 'block',
+        }}
         aria-label="Interactive Metro Manila Geographic Map"
       >
-        {/* Laguna de Bay (water body, southeast) */}
-        <ellipse cx="390" cy="490" rx="36" ry="60" fill="#72D0E8" opacity="0.85" />
-        <text x="380" y="476" fill="#0277BD" fontSize="7" fontWeight="700" textAnchor="middle">LAGUNA</text>
-        <text x="380" y="486" fill="#0277BD" fontSize="7" fontWeight="700" textAnchor="middle">LAKE</text>
+        {/* ── Water bodies ── */}
+        {/* Laguna de Bay (southeast) */}
+        <ellipse cx="430" cy="720" rx="80" ry="160" fill="#64B5F6" opacity="0.95" />
+        <ellipse cx="420" cy="710" rx="60" ry="120" fill="#90CAF9" opacity="0.4" />
 
-        {/* Border province labels */}
-        <text x="205" y="9" fill="#5D4037" fontSize="9" fontWeight="800" textAnchor="middle" opacity="0.75">BULACAN</text>
-        <text x="8" y="488" fill="#5D4037" fontSize="8" fontWeight="800" opacity="0.75">CAVITE</text>
-        <text x="205" y="572" fill="#5D4037" fontSize="9" fontWeight="800" textAnchor="middle" opacity="0.75">LAGUNA</text>
-        <text x="10" y="245" fill="#0277BD" fontSize="9" fontWeight="800" opacity="0.9"
-          transform="rotate(-90,10,245)">MANILA BAY</text>
-        <text x="418" y="155" fill="#5D4037" fontSize="9" fontWeight="800" textAnchor="end" opacity="0.75"
-          transform="rotate(90,418,155)">RIZAL</text>
+        {/* ── Province / water labels ── */}
+        <text x="80" y="18" fill="#fff" fontSize="14" fontWeight="800" opacity="0.85">BULACAN</text>
 
-        {/* City polygons */}
+        <text x="478" y="300" fill="#fff" fontSize="14" fontWeight="800" opacity="0.85"
+          transform="rotate(90,478,300)">RIZAL</text>
+
+        <text x="12" y="495" fill="#fff" fontSize="13" fontWeight="800" opacity="0.85"
+          transform="rotate(-90,12,495)">MANILA BAY</text>
+
+        <text x="28" y="860" fill="#fff" fontSize="12" fontWeight="800" opacity="0.85">CAVITE</text>
+
+        <text x="420" y="815" fill="#fff" fontSize="11" fontWeight="700" opacity="0.8" textAnchor="middle">LAGUNA</text>
+        <text x="420" y="833" fill="#fff" fontSize="11" fontWeight="700" opacity="0.8" textAnchor="middle">LAKE</text>
+
+        <text x="248" y="910" fill="#fff" fontSize="14" fontWeight="800" opacity="0.85" textAnchor="middle">LAGUNA</text>
+
+        {/* ── City polygons ── */}
         {CITY_DEFS.map(c => {
           const isHov = hovered === c.id;
           return (
@@ -163,59 +235,56 @@ export function MetroManilaMap({ onDistrictClick }: MetroManilaMapProps) {
               <path
                 d={c.path}
                 fill={isHov ? c.hover : c.fill}
-                stroke="rgba(255,255,255,0.85)"
-                strokeWidth={1.5}
-                style={{ transition: 'fill 90ms ease', filter: isHov ? 'brightness(1.15) drop-shadow(0 0 5px rgba(0,0,0,0.3))' : 'none' }}
+                stroke="rgba(255,255,255,0.9)"
+                strokeWidth={1.8}
+                style={{
+                  transition: 'fill 120ms ease, filter 120ms ease',
+                  filter: isHov
+                    ? 'brightness(1.15) drop-shadow(0 2px 6px rgba(0,0,0,0.35))'
+                    : 'none',
+                }}
               />
               <text
-                x={c.lx} y={c.ly}
-                textAnchor="middle"
-                fontSize={(c as any).fs ?? 10}
-                fontWeight="800"
+                x={c.lx}
+                y={c.ly}
                 fill="#fff"
-                paintOrder="stroke"
-                stroke="rgba(0,0,0,0.55)"
-                strokeWidth={2.5}
-                style={{ pointerEvents: 'none', fontFamily: "'Noto Sans', sans-serif" }}
+                fontSize={'fs' in c ? (c as any).fs : 11}
+                fontWeight="700"
+                textAnchor="middle"
+                dominantBaseline="central"
+                style={{ pointerEvents: 'none', textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
               >
                 {c.name}
               </text>
             </g>
           );
         })}
+
+        {/* ── Tooltip ── */}
+        {hovered && (() => {
+          const city = CITY_DEFS.find(c => c.id === hovered);
+          if (!city) return null;
+          const tx = city.lx;
+          const ty = city.ly - 22;
+          return (
+            <g style={{ pointerEvents: 'none' }}>
+              <rect
+                x={tx - 50} y={ty - 12}
+                width={100} height={24}
+                rx={6}
+                fill="rgba(0,0,0,0.8)"
+              />
+              <text
+                x={tx} y={ty + 2}
+                fill="#fff" fontSize="10" fontWeight="600"
+                textAnchor="middle" dominantBaseline="central"
+              >
+                {city.name} — Click to explore
+              </text>
+            </g>
+          );
+        })()}
       </svg>
-
-      {/* Hover tooltip */}
-      {hovered && (
-        <div style={{
-          position: 'absolute', top: 8, left: '50%', transform: 'translateX(-50%)',
-          background: 'rgba(27,94,32,0.95)', color: '#fff',
-          padding: '4px 14px', borderRadius: 5, fontSize: 11, fontWeight: 700,
-          pointerEvents: 'none', boxShadow: '0 2px 10px rgba(0,0,0,0.3)',
-          whiteSpace: 'nowrap',
-        }}>
-          {CITY_DEFS.find(c => c.id === hovered)?.name} — click to filter jobs
-        </div>
-      )}
-
-      {/* District filter buttons */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
-        {DISTRICTS.map(d => (
-          <button
-            key={d.id}
-            onClick={() => onDistrictClick(d.id)}
-            style={{
-              background: 'linear-gradient(180deg,#e8f5e9,#c8e6c9)',
-              border: '1px solid #81C784', borderBottom: '2px solid #4CAF50',
-              borderRadius: 6, padding: '4px 10px', cursor: 'pointer',
-              fontSize: 11, fontWeight: 700, color: '#1B5E20',
-              fontFamily: "'Noto Sans', sans-serif",
-            }}
-          >
-            {d.name.split('—')[0].trim()} — {d.jobCount.toLocaleString()} jobs
-          </button>
-        ))}
-      </div>
     </div>
   );
 }
